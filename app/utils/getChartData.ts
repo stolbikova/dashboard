@@ -6,7 +6,7 @@ export const getChartData = (
   cpuId: string = "0",
   memoryType: "used" | "free" = "used"
 ) => {
-  const labels = serverData.data.map((item) =>
+  const labels = serverData?.data.map((item) =>
     new Date(item.timestamp || 0).toLocaleTimeString()
   );
   const datasets = [
@@ -14,7 +14,7 @@ export const getChartData = (
       ? [
           {
             label: `Memory ${memoryType} (%)`,
-            data: serverData.data.map((item) =>
+            data: serverData?.data.map((item) =>
               item.memory ? item.memory[`${memoryType}Percentage`] : null
             ),
             borderColor: "rgb(255, 99, 132)",
@@ -26,7 +26,7 @@ export const getChartData = (
       ? [
           {
             label: `CPU Usage (%) - CPU ${cpuId}`,
-            data: serverData.data.map((item) =>
+            data: serverData?.data.map((item) =>
               item.cpu && item.cpu[Number(cpuId)]
                 ? item.cpu[Number(cpuId)].usage
                 : null

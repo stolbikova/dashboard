@@ -39,7 +39,7 @@ const useWebSocket = (
     return () => {
       websocket.current?.close();
     };
-  }, []);
+  }, [machines]);
 
   const addMessage = (newMessage: WSResponse) => {
     setMessages((prevMessages) => {

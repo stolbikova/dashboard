@@ -8,7 +8,6 @@ import {
   RadioGroup,
   FormControlLabel,
   FormControl,
-  Divider,
   TableRow,
 } from "@mui/material";
 import { Line } from "react-chartjs-2";
@@ -76,7 +75,10 @@ export default function Page({ params }: Params) {
   console.log(firstSampleElement);
   return (
     <Paper style={{ padding: 16 }}>
-      <Typography variant="h4">{`server${params.slug}`}</Typography>
+      <Typography
+        variant="h4"
+        className={styles.header}
+      >{`server${params.slug}`}</Typography>
 
       <FormControl>
         <RadioGroup
@@ -118,7 +120,6 @@ export default function Page({ params }: Params) {
               label="Memory"
             />
 
-            {/* <Divider orientation="vertical" flexItem /> */}
             {state.type !== "cpu" ? (
               <FormControl>
                 <RadioGroup

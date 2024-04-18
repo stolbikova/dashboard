@@ -1,0 +1,9 @@
+    .dropdown {
+        margin: 20px;
+        width: 200px;
+    }
+
+    .chartContainer {
+        display: flex;
+        justify-content: space-evenly;
+    }
