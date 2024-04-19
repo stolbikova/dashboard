@@ -25,7 +25,7 @@ function Dropdown({
         onChange={onChange}
       >
         {options.map((opt, idx) => (
-          <MenuItem idx={idx} value={opt.value}>
+          <MenuItem idx={idx} value={opt.value} key={idx} role="button">
             {opt.label}
           </MenuItem>
         ))}

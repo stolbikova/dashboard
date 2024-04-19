@@ -55,7 +55,8 @@ export default function Page({ params }: Params) {
   });
   const { messages } = useWebSocket(`server${params.slug}`, state.type);
   const server = `server${params.slug}`;
-  const firstSampleElement = messages[server]?.data[0];
+  const cpuLength =
+    messages[server]?.data[messages[server]?.data.length - 1]?.cpu?.length;
 
   const chartData = useMemo(
     () =>
@@ -80,13 +81,12 @@ export default function Page({ params }: Params) {
   return (
     <>
       <Paper className={styles.paper}>
-        <Typography variant="h4" className={styles.header}>
+        <Typography variant="h4" className={styles.header} component="h1">
           {server}
         </Typography>
 
         <FormControl>
           <RadioGroup
-            aria-labelledby="demo-radio-buttons-group-label"
             defaultValue="all"
             name="radio-buttons-group"
             onChange={handleChange("type")}
@@ -94,7 +94,7 @@ export default function Page({ params }: Params) {
             <Grid>
               <FormControlLabel value="cpu" control={<Radio />} label="CPU" />
 
-              {state.type !== "memory" && firstSampleElement?.cpu?.length ? (
+              {state.type !== "memory" && cpuLength ? (
                 <FormControl>
                   {/* <FormLabel>CPU Id</FormLabel> */}
                   <RadioGroup
@@ -104,15 +104,14 @@ export default function Page({ params }: Params) {
                     onChange={handleChange("cpuId")}
                     row
                   >
-                    {firstSampleElement.cpu &&
-                      firstSampleElement.cpu.map((cpuItem, idx) => (
-                        <FormControlLabel
-                          key={cpuItem.id}
-                          value={cpuItem.id}
-                          control={<Radio />}
-                          label={idx}
-                        />
-                      ))}
+                    {new Array(cpuLength).fill(1).map((cpuItem, idx) => (
+                      <FormControlLabel
+                        key={idx}
+                        value={idx}
+                        control={<Radio />}
+                        label={idx}
+                      />
+                    ))}
                   </RadioGroup>
                 </FormControl>
               ) : null}

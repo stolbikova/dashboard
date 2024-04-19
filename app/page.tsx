@@ -24,7 +24,7 @@ ChartJS.register(
   Legend
 );
 import Dropdown from "./components/dropdown";
-import { MemoryChart } from "./components/gaugeChats";
+import { MemoryChart } from "./components/gaugeCharts";
 import { getChartData } from "./utils/getChartData";
 import useWebSocket from "./hooks/useWebSocket";
 import { MACHINES } from "./constants";
