@@ -1,9 +1,14 @@
     .dropdown {
         margin: 20px;
+        padding: 0 24px;
         width: 200px;
     }
 
     .chartContainer {
         display: flex;
-        justify-content: space-evenly;
+        margin: 20px;
+    }
+
+    .serverPlot {
+        margin: 20px 0;
     }

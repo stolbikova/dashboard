@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import Link from "next/link";
 import {
   Paper,
   Typography,
@@ -8,7 +9,7 @@ import {
   RadioGroup,
   FormControlLabel,
   FormControl,
-  TableRow,
+  Grid,
 } from "@mui/material";
 import { Line } from "react-chartjs-2";
 import {
@@ -52,11 +53,15 @@ export default function Page({ params }: Params) {
     cpuId: "0",
     memoryType: "used",
   });
-  const { messages, sendMessage } = useWebSocket(
-    `server${params.slug}`,
-    state.type
+  const { messages } = useWebSocket(`server${params.slug}`, state.type);
+  const server = `server${params.slug}`;
+  const firstSampleElement = messages[server]?.data[0];
+
+  const chartData = useMemo(
+    () =>
+      getChartData(messages[server], state.type, state.cpuId, state.memoryType),
+    [messages, server, state]
   );
-  const firstSampleElement = messages[`server${params.slug}`]?.data[0];
 
   if (!messages[`server${params.slug}`]) {
     return null;
@@ -72,95 +77,93 @@ export default function Page({ params }: Params) {
         }));
     };
 
-  console.log(firstSampleElement);
   return (
-    <Paper style={{ padding: 16 }}>
-      <Typography
-        variant="h4"
-        className={styles.header}
-      >{`server${params.slug}`}</Typography>
+    <>
+      <Paper className={styles.paper}>
+        <Typography variant="h4" className={styles.header}>
+          {server}
+        </Typography>
 
-      <FormControl>
-        <RadioGroup
-          aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue="all"
-          name="radio-buttons-group"
-          onChange={handleChange("type")}
-        >
-          <TableRow>
-            <FormControlLabel value="cpu" control={<Radio />} label="CPU" />
+        <FormControl>
+          <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            defaultValue="all"
+            name="radio-buttons-group"
+            onChange={handleChange("type")}
+          >
+            <Grid>
+              <FormControlLabel value="cpu" control={<Radio />} label="CPU" />
 
-            {state.type !== "memory" && firstSampleElement?.cpu?.length ? (
-              <FormControl>
-                {/* <FormLabel>CPU Id</FormLabel> */}
-                <RadioGroup
-                  className={styles.radioGroup}
-                  defaultValue="0"
-                  name="radio-buttons-group"
-                  onChange={handleChange("cpuId")}
-                  row
-                >
-                  {firstSampleElement.cpu &&
-                    firstSampleElement.cpu.map((cpuItem, idx) => (
-                      <FormControlLabel
-                        key={cpuItem.id}
-                        value={cpuItem.id}
-                        control={<Radio />}
-                        label={idx}
-                      />
-                    ))}
-                </RadioGroup>
-              </FormControl>
-            ) : null}
-          </TableRow>
-          <TableRow>
-            <FormControlLabel
-              value="memory"
-              control={<Radio />}
-              label="Memory"
-            />
+              {state.type !== "memory" && firstSampleElement?.cpu?.length ? (
+                <FormControl>
+                  {/* <FormLabel>CPU Id</FormLabel> */}
+                  <RadioGroup
+                    className={styles.radioGroup}
+                    defaultValue="0"
+                    name="radio-buttons-group"
+                    onChange={handleChange("cpuId")}
+                    row
+                  >
+                    {firstSampleElement.cpu &&
+                      firstSampleElement.cpu.map((cpuItem, idx) => (
+                        <FormControlLabel
+                          key={cpuItem.id}
+                          value={cpuItem.id}
+                          control={<Radio />}
+                          label={idx}
+                        />
+                      ))}
+                  </RadioGroup>
+                </FormControl>
+              ) : null}
+            </Grid>
+            <Grid>
+              <FormControlLabel
+                value="memory"
+                control={<Radio />}
+                label="Memory"
+              />
 
-            {state.type !== "cpu" ? (
-              <FormControl>
-                <RadioGroup
-                  className={styles.radioGroup}
-                  defaultValue="used"
-                  name="radio-buttons-group"
-                  onChange={handleChange("memoryType")}
-                  row
-                >
-                  <FormControlLabel
-                    key={"0"}
-                    value={"used"}
-                    control={<Radio />}
-                    label={"Used"}
-                  />
-                  <FormControlLabel
-                    key={"1"}
-                    value={"free"}
-                    control={<Radio />}
-                    label={"Free"}
-                  />
-                </RadioGroup>
-              </FormControl>
-            ) : null}
-          </TableRow>
-          <FormControlLabel value="all" control={<Radio />} label="All" />
-        </RadioGroup>
-      </FormControl>
+              {state.type !== "cpu" ? (
+                <FormControl>
+                  <RadioGroup
+                    className={styles.radioGroup}
+                    defaultValue="used"
+                    name="radio-buttons-group"
+                    onChange={handleChange("memoryType")}
+                    row
+                  >
+                    <FormControlLabel
+                      key={"0"}
+                      value={"used"}
+                      control={<Radio />}
+                      label={"Used"}
+                    />
+                    <FormControlLabel
+                      key={"1"}
+                      value={"free"}
+                      control={<Radio />}
+                      label={"Free"}
+                    />
+                  </RadioGroup>
+                </FormControl>
+              ) : null}
+            </Grid>
+            <FormControlLabel value="all" control={<Radio />} label="All" />
+          </RadioGroup>
+        </FormControl>
 
-      <Line
-        options={{
-          responsive: true,
-          scales: { y: { beginAtZero: true } },
-        }}
-        data={getChartData(
-          messages[`server${params.slug}`],
-          state.type,
-          state.cpuId,
-          state.memoryType
-        )}
-      />
-    </Paper>
+        <Line
+          options={{
+            responsive: true,
+            scales: { y: { beginAtZero: true } },
+          }}
+          data={chartData}
+        />
+      </Paper>
+      <Link className={styles.link} href={`/`}>
+        Go to main screen
+      </Link>
+    </>
   );
 }

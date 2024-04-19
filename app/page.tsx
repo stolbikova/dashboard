@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { CssBaseline, Grid, Paper, Typography } from "@mui/material";
 import { Line } from "react-chartjs-2";
 import Link from "next/link";
@@ -33,7 +33,12 @@ import styles from "./page.module.css";
 
 function WebSocketComponent() {
   const [server, setServer] = useState<string>(MACHINES[0]);
-  const { messages, sendMessage } = useWebSocket(server);
+  const { messages } = useWebSocket(server);
+
+  const chartData = useMemo(
+    () => getChartData(messages[server]),
+    [messages, server]
+  );
 
   const matches = server.match(/\d+/);
   return (
@@ -49,31 +54,34 @@ function WebSocketComponent() {
         name="Server"
       />
       <Grid container spacing={3} className={styles.chartContainer}>
-        <Grid item xs={12} sm={6}>
-          <Link href={`/server/${matches ? matches[0] : "01"}`}>
-            <Paper style={{ padding: 16 }}>
-              <Typography variant="h4">{server}</Typography>
+        <Grid item xs={12} sm={8}>
+          <Typography variant="h4">{server}</Typography>
+          <Paper style={{ padding: 16 }} className={styles.serverPlot}>
+            <Line
+              options={{
+                responsive: true,
+                scales: { y: { beginAtZero: true } },
+              }}
+              data={chartData}
+            />
+          </Paper>
 
-              <Line
-                options={{
-                  responsive: true,
-                  scales: { y: { beginAtZero: true } },
-                }}
-                data={getChartData(messages[server])}
-              />
-            </Paper>
+          <Link href={`/server/${matches ? matches[0] : "01"}`}>
+            Go to more details
           </Link>
         </Grid>
-        <MemoryChart
-          used={
-            messages[server]?.data[messages[server]?.data.length - 1]?.memory
-              ?.usedPercentage
-          }
-          free={
-            messages[server]?.data[messages[server]?.data.length - 1]?.memory
-              ?.freePercentage
-          }
-        />
+        <Grid item xs={12} sm={4}>
+          <MemoryChart
+            used={
+              messages[server]?.data[messages[server]?.data.length - 1]?.memory
+                ?.usedPercentage
+            }
+            free={
+              messages[server]?.data[messages[server]?.data.length - 1]?.memory
+                ?.freePercentage
+            }
+          />
+        </Grid>
       </Grid>
     </>
   );

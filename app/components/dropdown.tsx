@@ -17,16 +17,17 @@ function Dropdown({
 }) {
   return (
     <FormControl fullWidth className={className}>
-      <InputLabel id="demo-simple-select-label">{name}</InputLabel>
+      <InputLabel>{name}</InputLabel>
       <Select
-        labelId="demo-simple-select-label"
         id="demo-simple-select"
         value={value.label}
         label="Option"
         onChange={onChange}
       >
-        {options.map((opt) => (
-          <MenuItem value={opt.value}>{opt.label}</MenuItem>
+        {options.map((opt, idx) => (
+          <MenuItem idx={idx} value={opt.value}>
+            {opt.label}
+          </MenuItem>
         ))}
       </Select>
     </FormControl>

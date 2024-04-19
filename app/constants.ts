@@ -9,4 +9,4 @@ export const MACHINES = [
 // put it in .env file
 export const WS_API = "wss://lps-monitoring.up.railway.app/realtime";
 
-export const MAX_MESSAGES = 10;
+export const MAX_MESSAGES = 100;

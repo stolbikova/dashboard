@@ -43,18 +43,26 @@ const useWebSocket = (
 
   const addMessage = (newMessage: WSResponse) => {
     setMessages((prevMessages) => {
-      const prev = prevMessages[newMessage.machine] || { index: 0, data: [] };
-      const newData = [...prev.data];
-      if (newData.length < MAX_MESSAGES) {
-        newData.push(newMessage);
-      } else {
-        newData[prev.index] = newMessage;
+      const machine = newMessage.machine;
+      const machineData = prevMessages[machine] || { index: 0, data: [] };
+
+      // Add new message to the data array
+      let newData = [...machineData.data, newMessage];
+
+      // Sort data by timestamp in ascending order
+      newData.sort((a, b) => a.timestamp - b.timestamp);
+
+      // Check if the data exceeds the maximum messages allowed
+      if (newData.length > MAX_MESSAGES) {
+        // Remove the oldest data if above max messages limit
+        newData = newData.slice(-MAX_MESSAGES);
       }
-      const newIndex = (prev.index + 1) % MAX_MESSAGES;
+
+      // Return the updated state
       return {
         ...prevMessages,
-        [newMessage.machine]: {
-          index: newIndex,
+        [machine]: {
+          ...machineData,
           data: newData,
         },
       };
