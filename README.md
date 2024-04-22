@@ -31,6 +31,8 @@ npm install
 npm dev
 ```
 
+Server will be launched on http://localhost:3000/
+
 ## Running Tests
 
 ```bash
