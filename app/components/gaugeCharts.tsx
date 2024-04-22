@@ -24,8 +24,9 @@ export function GaugeChart(props: {
   };
 
   return (
-    <div className={styles.chartContainer}>
+    <div data-testid="chart-container" className={styles.chartContainer}>
       <Doughnut data={props} options={options} />
+      {/* This is just for testing if the container itself is rendering */}
     </div>
   );
 }

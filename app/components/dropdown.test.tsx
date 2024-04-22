@@ -23,9 +23,8 @@ describe("Dropdown", () => {
 
     userEvent.click(screen.getByRole("combobox")); // Open the dropdown
 
-    // Ensure all options are available and visible
     for (const option of options) {
-      await screen.findByText(option.label); // Use findByText for asynchronous finding
+      await screen.findByText(option.label);
       expect(screen.getByText(option.label)).toBeInTheDocument();
     }
   });
