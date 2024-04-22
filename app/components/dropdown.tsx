@@ -1,4 +1,10 @@
-import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from "@mui/material";
 
 type OptionI = { value: string; label: string };
 
@@ -10,7 +16,7 @@ function Dropdown({
   name,
 }: {
   options: OptionI[];
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: SelectChangeEvent<string>) => void;
   value: OptionI;
   className: string;
   name: string;
@@ -25,7 +31,7 @@ function Dropdown({
         onChange={onChange}
       >
         {options.map((opt, idx) => (
-          <MenuItem idx={idx} value={opt.value} key={idx} role="button">
+          <MenuItem value={opt.value} key={idx} role="button">
             {opt.label}
           </MenuItem>
         ))}

@@ -33,7 +33,7 @@ export function GaugeChart(props: {
 export function MemoryChart({ used, free }: { used: number; free: number }) {
   return (
     <>
-      <Typography variant="p">Memory usage</Typography>
+      <Typography>Memory usage</Typography>
       <GaugeChart
         labels={["Used", "Free"]}
         datasets={[

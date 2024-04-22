@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { CssBaseline, Grid, Paper, Typography } from "@mui/material";
+import {
+  CssBaseline,
+  Grid,
+  Paper,
+  Typography,
+  SelectChangeEvent,
+} from "@mui/material";
 import { Line } from "react-chartjs-2";
 import Link from "next/link";
 import {
@@ -47,9 +53,7 @@ function WebSocketComponent() {
       <Dropdown
         className={styles.dropdown}
         options={MACHINES.map((m) => ({ label: m, value: m }))}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setServer(e.target.value)
-        }
+        onChange={(e: SelectChangeEvent<string>) => setServer(e.target.value)}
         value={{ label: server, value: server }}
         name="Server"
       />
