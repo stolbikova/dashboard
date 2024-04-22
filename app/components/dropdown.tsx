@@ -26,12 +26,12 @@ function Dropdown({
       <InputLabel>{name}</InputLabel>
       <Select
         id="demo-simple-select"
-        value={value.label}
+        value={value.value}
         label="Option"
         onChange={onChange}
       >
         {options.map((opt, idx) => (
-          <MenuItem value={opt.value} key={idx} role="button">
+          <MenuItem value={opt.value} key={idx} role="option">
             {opt.label}
           </MenuItem>
         ))}
