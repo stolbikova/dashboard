@@ -7,6 +7,7 @@ const useWebSocket = (
   type: MessageType = "all"
 ) => {
   const [messages, setMessages] = useState<Record<string, MessageI>>({});
+  const [isConnected, setIsConnected] = useState(false);
   const websocket = useRef<WebSocket | null>(null);
 
   useEffect(() => {
@@ -14,6 +15,7 @@ const useWebSocket = (
     websocket.current = new WebSocket(WS_API);
     websocket.current.onopen = () => {
       console.debug("WebSocket is open now.");
+      setIsConnected(true);
 
       // Subscribe to machines after the connection is open
       if (Array.isArray(machines))
@@ -33,6 +35,7 @@ const useWebSocket = (
 
     websocket.current.onclose = () => {
       console.debug("WebSocket is closed now.");
+      setIsConnected(false);
     };
 
     // Cleanup on component unmount or WebSocket close
@@ -75,7 +78,7 @@ const useWebSocket = (
     }
   };
 
-  return { messages, sendMessage };
+  return { messages, sendMessage, isConnected };
 };
 
 export default useWebSocket;
