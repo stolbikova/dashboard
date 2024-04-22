@@ -38,3 +38,8 @@ Server will be launched on http://localhost:3000/
 ```bash
 npm test
 ```
+
+## Notes
+
+1. I maintain a buffer of only 100 data samples in memory. When new data arrives and the buffer is full, I discard the oldest data samples to make room for the new ones.
+2. I was unable to implement the aggregate server metrics view because, although the server acknowledges the request to send data for all five servers successfully, it only sends data for the first server. I've suggested that there is some error in server implementation.
