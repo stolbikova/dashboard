@@ -1,12 +1,19 @@
 import { renderHook, act, waitFor } from "@testing-library/react";
-import useWebSocket from "./useWebSocket";
 import WS from "jest-websocket-mock";
 
+import useWebSocket from "./useWebSocket";
+import { WS_API } from "../constants";
+
+interface WebSocketMock extends WebSocket {
+  connected: Promise<void>;
+  send(data: string): void;
+}
+
 describe("useWebSocket", () => {
-  let server: typeof WS;
+  let server: WebSocketMock;
 
   beforeEach(async () => {
-    server = new WS("wss://lps-monitoring.up.railway.app/realtime");
+    server = new WS(WS_API) as unknown as WebSocketMock;
   });
 
   afterEach(() => {
